@@ -3,7 +3,7 @@ package com.spaceyatech.berlin.controller;
 import com.spaceyatech.berlin.error.BlogPostNotFoundException;
 import com.spaceyatech.berlin.requests.BlogPostRequest;
 import com.spaceyatech.berlin.response.BlogPostResponse;
-import com.spaceyatech.berlin.services.BlogPostService;
+import com.spaceyatech.berlin.services.blogpostservice.BlogPostService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

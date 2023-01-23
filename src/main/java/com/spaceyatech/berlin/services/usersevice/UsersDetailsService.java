@@ -1,4 +1,4 @@
-package com.spaceyatech.berlin.services;
+package com.spaceyatech.berlin.services.usersevice;
 
 import com.spaceyatech.berlin.models.User;
 import com.spaceyatech.berlin.repository.UserRepository;

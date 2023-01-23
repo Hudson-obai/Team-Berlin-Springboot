@@ -1,4 +1,4 @@
-package com.spaceyatech.berlin.services;
+package com.spaceyatech.berlin.services.usersevice;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -15,16 +15,13 @@ import com.spaceyatech.berlin.response.JwtResponse;
 import com.spaceyatech.berlin.response.MessageResponse;
 import com.spaceyatech.berlin.response.TokenRefreshResponse;
 import com.spaceyatech.berlin.security.jwt.JwtUtils;
+import com.spaceyatech.berlin.services.emailservice.EmailDetails;
+import com.spaceyatech.berlin.services.emailservice.EmailService;
 import com.spaceyatech.berlin.utilities.Dry;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import liquibase.pro.packaged.A;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -52,10 +49,13 @@ public class UserService {
     @Autowired
     private JwtUtils jwtUtils;
 
+    @Autowired
+    private EmailService emailService;
+
     public JwtResponse signIn(LoginRequest loginRequest){
 
 
-        log.info("sign in request:-->{}",loginRequest);
+        log.info("sign in request:-->{}",loginRequest.getUsername());
 
 
         Authentication authentication = authenticationManager.authenticate(
@@ -68,7 +68,7 @@ public class UserService {
 
         log.info("authentication data:-->{}", authentication);
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);//This is where we store details of the present security context of the application, which includes details of the principal currently using the application.
         String access_token = jwtUtils.generateJwtToken(authentication);
         String refresh_token = jwtUtils.generateJwtRefreshToken(authentication);
 
@@ -106,28 +106,27 @@ public class UserService {
 
             if(userRepository.existsByUsername(signUpRequest.getUsername())) {
                 return new MessageResponse("Error: Username is already taken!");
-                /*return ResponseEntity
-                        .badRequest()
-                        .body(new MessageResponse("Error: Username is already taken!"));*/
+
             }
 
             if (userRepository.existsByEmail(signUpRequest.getEmail())) {
                 return new MessageResponse("Error: Email is already in use!");
-                /*return ResponseEntity
-                        .badRequest()
-                        .body(new MessageResponse("Error: Email is already in use!"));*/
+
             }
 
             // Create new user's account
             String date = Dry.getCurrentDate();
 
             log.info("getcurrentdate:-->{}",date);
+            String otp =Dry.generateOtp();
+            log.info("Generated OTP is :{}",otp);
 
             User user = User.builder()
                     .username(signUpRequest.getUsername())
                     .email(signUpRequest.getEmail())
                     .password(encoder.encode(signUpRequest.getPassword()))
                     .date_created(Timestamp.valueOf(date))//change to proper date
+                    .verification_code(otp)
                     .build();
 
 
@@ -169,11 +168,28 @@ public class UserService {
 
 
             try{
-                userRepository.save(user);
+              User userDetails =  userRepository.save(user);
+
+                //TODO: we can send email alert also generate OTP in future
+
+
+                //building the email content
+                //String emailBody= "Dear "+userDetails.getUsername()+ ",\nWelcome to SpaceYaTech,Your user account has been created successfully";
+                String emailBody= Dry.salutation() +userDetails.getUsername()+ Dry.userRegisteredEmail();
+                EmailDetails details = EmailDetails.builder()
+                        .subject("Successfully Registered")
+                        .recipient(userDetails.getEmail())//email
+                        .emailBody(emailBody)
+                .build();
+                //sending email
+                emailService.sendEmail(details);
+
                  msg = MessageResponse.builder()
                         .message("User registered successfully!")
                         .build();
+
                 log.info("Registered:-->{}",msg);
+
             }catch (Exception e){
                 log.error("Not Registered:-->{}",e.getMessage());
                 msg = MessageResponse.builder()

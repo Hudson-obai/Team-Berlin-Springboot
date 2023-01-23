@@ -1,7 +1,7 @@
 package com.spaceyatech.berlin;
 import com.spaceyatech.berlin.enums.RoleName;
 import com.spaceyatech.berlin.models.Role;
-import com.spaceyatech.berlin.services.UserService;
+import com.spaceyatech.berlin.services.usersevice.UserService;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.boot.CommandLineRunner;

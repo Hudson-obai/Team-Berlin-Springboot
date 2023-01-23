@@ -7,7 +7,7 @@ import com.spaceyatech.berlin.requests.TokenRefreshRequest;
 import com.spaceyatech.berlin.response.JwtResponse;
 import com.spaceyatech.berlin.response.MessageResponse;
 import com.spaceyatech.berlin.response.TokenRefreshResponse;
-import com.spaceyatech.berlin.services.UserService;
+import com.spaceyatech.berlin.services.usersevice.UserService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -41,6 +41,7 @@ public class AuthController {
     @PostMapping("/signin")
 
     public ResponseEntity<JwtResponse> login( @Valid @RequestBody LoginRequest loginRequest) {
+        log.info("login request:{}",loginRequest.getUsername());
 
         JwtResponse response = userService.signIn(loginRequest);
 

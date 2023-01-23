@@ -1,7 +1,7 @@
 package com.spaceyatech.berlin.security.jwt;
 
 
-import com.spaceyatech.berlin.services.UserDetailss;
+import com.spaceyatech.berlin.services.usersevice.UserDetailss;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.*;

@@ -77,10 +77,13 @@ public class WebSecurityConfig  {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/api/auth/**").permitAll()
+                .authorizeRequests()
+                .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/test/**").permitAll()
+                .antMatchers("/actuator/health").permitAll()
+                .antMatchers("/actuator/prometheus/**").permitAll()
                 .antMatchers("/swagger-ui/**","/v3/api-docs/**").permitAll()
-                .antMatchers("/api/admin/**").hasAuthority(""+RoleName.ROLE_ADMIN)
+                .antMatchers("/api/v1/admin/**").hasAuthority(""+RoleName.ROLE_ADMIN)
                 .antMatchers("/api/v1/blogposts/**").hasAuthority(""+RoleName.ROLE_USER)
                 .anyRequest().authenticated();
 
