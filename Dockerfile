@@ -1,11 +1,15 @@
-# syntax=docker/dockerfile:1
 
-FROM openjdk:17-slim
 
-RUN mkdir /app
-COPY . /app
-WORKDIR /app
+FROM openjdk:17
 
-RUN ./mvnw dependency:resolve
+#Define where your jar file resides.
+ARG JAR_FILE=target/*.jar
 
-CMD ["./mvnw", "spring-boot:run"]
+# Copy the jar file into our app.jar
+COPY ./target/berlinspringboot-0.0.1.jar /app.jar
+
+# Exposing port 8080
+EXPOSE 8080
+
+# Starting the application
+ENTRYPOINT ["java","-jar","/app.jar"]

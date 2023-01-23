@@ -1,4 +1,4 @@
-package com.spaceyatech.berlin.services;
+package com.spaceyatech.berlin.services.blogpostservice;
 
 import com.spaceyatech.berlin.error.BlogPostNotFoundException;
 import com.spaceyatech.berlin.requests.BlogPostRequest;
