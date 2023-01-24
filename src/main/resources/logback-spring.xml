@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern> %d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n </pattern>
+        </encoder>
+    </appender>
+    <appender name="SAVE-TO-FILE" class="ch.qos.logback.core.FileAppender">
+    <file>logs/application.log</file>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <Pattern> %d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n </Pattern>
+    </encoder>
+    </appender>
+    <logger name="com.spaceyatech.berlin" additivity="false" level="info">
+        <appender-ref ref="SAVE-TO-FILE" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
+<!--
+
+        %d – Returns the time when the log message occurred.
+        %thread – Returns the name of the thread in which the log message occurred.
+        %-5level – Returns the logging level of the log message (ERROR, WARN, INFO, DEBUG, and TRACE).
+        %logger{64} – Returns the package with the package and class name where the log message occurred. The number 64 inside the brackets represents the maximum length of the package and class name combined. You can change this number as per your need.
+        %M – Returns the name of the method where the log message has occurred.
+        %msg – Returns the actual log message.
+        %n – Line break.-->

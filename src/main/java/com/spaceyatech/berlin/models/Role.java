@@ -1,25 +1,26 @@
 package com.spaceyatech.berlin.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.spaceyatech.berlin.enums.RoleName;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Builder
-@Data
-@Entity
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@Entity
 @Table(name="Role")
 public class Role extends BaseEntity{
     //id from base entity
     @Column(name="role_name", length=45)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private RoleName name;
     @Column(name ="role_col",length=45)
     private String rolecol;
 
@@ -31,5 +32,6 @@ public class Role extends BaseEntity{
             mappedBy = "role")
     @JsonIgnore
     private Set<User> user = new HashSet<>();
+
 
 }

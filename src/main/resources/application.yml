@@ -10,7 +10,7 @@ spring:
 
   datasource:
     password: berlin
-    url: jdbc:postgresql://localhost:5432/berlin
+    url: jdbc:postgresql://database:5432/berlin #jdbc:postgresql://localhost:5432/berlin
     username: berlin
   jpa:
     hibernate:
@@ -25,3 +25,30 @@ spring:
     drop-first: false
     change-log: classpath:db.changelog/db.changelog-master.xml
     default-schema: public
+  mail:
+    host: smtp.gmail.com
+    username: sydneymainga6@gmail.com
+    password: htxolgckfzbsgkot
+    port: '587'
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: 'true'
+          auth: 'true'
+management:
+    endpoint:
+      metrics:
+        enabled: true
+      prometheus:
+        enabled: true
+    endpoints:
+      web:
+        exposure:
+          include: prometheus
+jwt-properties:
+            app:
+             jwtSecret: berlinSecretKey
+             jwtExpirationMs: 86400000    #1day
+             refreshExpirationMs: 864000000 #10days
+
